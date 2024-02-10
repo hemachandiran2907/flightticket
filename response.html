@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Your E-ticket here!!!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            animation: fadeInBody 1s ease-in-out;
+            background-image: url(./images/ccc.jpg);
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        #container {
+            max-width: 600px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            animation: slideInContainer 0.5s ease forwards;
+            background: rgba(3, 3, 3, 0.57);
+            padding: 25px;
+            color: #f2f2f2;
+        }
+
+        #downloadButton {
+            background-color: #FFC107;
+            color: #f2f2f2;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            animation: fadeInButton 1s ease forwards;
+        }
+
+        #downloadButton:hover {
+            background: #212121;
+            color: #fff;
+        }
+        ol{
+            list-style-type: none;
+        }
+
+        @keyframes fadeInBody {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInContainer {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInButton {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <h1>Download Your E-Ticket here!!!</h1>
+        <div id="userInputs"></div>
+        <div id="eTicketResponse"></div>
+        <div id="seatNumbersSection">
+            <h3>Seat Numbers:</h3>
+            <ol id="seatNumbers"></ol>
+        </div>
+        <button id="downloadButton" onclick="downloadETicket()">Download E-Ticket</button>
+    </div>
+
+    <script>
+        // Retrieve user inputs from sessionStorage
+        var userInputs = JSON.parse(sessionStorage.getItem("userInputs"));
+
+        // Display user inputs on the page
+        document.getElementById("userInputs").innerHTML = `
+            <p><strong>From:</strong> ${userInputs.fromCity}</p>
+            <p><strong>To:</strong> ${userInputs.toCity}</p>
+            <p><strong>Email:</strong> ${userInputs.email}</p>
+            <p><strong>Depart Date:</strong> ${userInputs.departDate}</p>
+            <p><strong>Return Date:</strong> ${userInputs.returnDate}</p>
+            <p><strong>Travel Class:</strong> ${userInputs.travelClass}</p>
+            <p><strong>Number of Adults:</strong> ${userInputs.numAdults}</p>
+            <p><strong>Number of Children:</strong> ${userInputs.numChildren}</p>
+        `;
+
+        // Simulate generating e-ticket response (you can replace this with your actual logic)
+        var eTicketResponse = "Your e-ticket has been generated successfully.";
+
+        // Display e-ticket response
+        document.getElementById("eTicketResponse").textContent = eTicketResponse;
+
+        // Function to handle downloading e-ticket (you can implement actual download logic)
+        function downloadETicket() {
+            // Simulate downloading e-ticket (replace this with your actual logic)
+            console.log("Downloading e-ticket...");
+            alert("Downloading e-ticket...");
+        }
+
+
+        document.getElementById('downloadButton').addEventListener('click', function () {
+            generatePDF();
+        });
+
+
+        // Function to generate PDF
+        function generatePDF() {
+            var doc = new jsPDF();
+            var userInputs = JSON.parse(sessionStorage.getItem("userInputs"));
+            var seatNumbers = document.getElementById("seatNumbers").innerText;
+
+            doc.text(20, 20, 'E-Ticket Details');
+            doc.text(20, 30, 'From: ' + userInputs.fromCity);
+            doc.text(20, 40, 'To: ' + userInputs.toCity);
+            doc.text(20, 50, 'Email: ' + userInputs.email);
+            doc.text(20, 60, 'Depart Date: ' + userInputs.departDate);
+            doc.text(20, 70, 'Return Date: ' + userInputs.returnDate);
+            doc.text(20, 80, 'Travel Class: ' + userInputs.travelClass);
+            doc.text(20, 90, 'Number of Adults: ' + userInputs.numAdults);
+            doc.text(20, 100, 'Number of Children: ' + userInputs.numChildren);
+            doc.text(20, 110, 'Seat Numbers:');
+            doc.text(20, 120, seatNumbers);
+
+            // Save the PDF
+            doc.save('e-ticket.pdf');
+        }
+
+
+        function generateSeatNumbers(numAdults, numChildren) {
+            var seatNumbers = [];
+            for (var i = 1; i <= numAdults; i++) {
+                var seatNumber = Math.floor(Math.random() * 100) + 1; // Generate a random seat number between 1 and 100
+                seatNumbers.push(seatNumber);
+            }
+            for (var j = 1; j <= numChildren; j++) {
+                var seatNumber = Math.floor(Math.random() * 100) + 1; // Generate a random seat number between 1 and 100
+                seatNumbers.push(seatNumber);
+            }
+            return seatNumbers;
+        }
+
+        // Get the number of adults and children
+        var numAdults = userInputs.numAdults;
+        var numChildren = userInputs.numChildren;
+
+        // Generate seat numbers for each passenger
+        var seatNumbers = generateSeatNumbers(numAdults, numChildren);
+
+        // Display seat numbers on the page
+        var seatNumbersList = document.getElementById("seatNumbers");
+        seatNumbers.forEach(function (seatNumber) {
+            var listItem = document.createElement("li");
+            listItem.textContent = "Seat Number: " + seatNumber;
+            seatNumbersList.appendChild(listItem);
+        });
+    </script>
+    <script src="./jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+</body>
+
+</html>

@@ -13,14 +13,20 @@
 	<meta name="keywords"
 		content="Flight Ticket Booking  Widget Responsive, Login Form Web Template, Flat Pricing Tables, Flat Drop-Downs, Sign-Up Web Templates, Flat Web Templates, Login Sign-up Responsive Web Template, Smartphone Compatible Web Template, Free Web Designs for Nokia, Samsung, LG, Sony Ericsson, Motorola Web Design" />
 	<script type="application/x-javascript">
-        addEventListener("load", function() {
+      /*  addEventListener("load", function() {
             setTimeout(hideURLbar, 0);
         }, false);
 
         function hideURLbar() {
             window.scrollTo(0, 1);
-        }
+        }*/
     </script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"> </script>
+	<script type="text/javascript">
+		(function () {
+			emailjs.init("oQW1V6RjojWRuDIg_");
+		})(); 
+	</script>
 	<style>
 		.load_more {
 			display: none;
@@ -41,23 +47,27 @@
 				<div class="clearfix"> </div>
 				<div class="resp-tabs-container">
 					<div class="tab-1 resp-tab-content roundtrip">
-						<form action="process_form.php" method="post">
-							<!-- ... (rest of the form remains unchanged) ... -->
+						<form action="" method="">
+							<!-- ... (rest of the form remains unchanged) .. -->
 							<div class="from">
 								<h3>From</h3>
-								<input type="text" name="city" class="city1" placeholder="Type Departure City"
-									required="">
+								<input type="text" name="fromCity" id="from" class="city1"
+									placeholder="Type Departure City" required="">
 							</div>
 							<div class="to">
 								<h3>To</h3>
-								<input type="text" name="city" class="city2" placeholder="Type Destination City"
-									required="">
+								<input type="text" name="toCity" id="to" class="city2"
+									placeholder="Type Destination City" required="">
+							</div>
+							<div class="email">
+								<h3>E-Mail</h3>
+								<input type="email" name="email" id="email" placeholder="E-mail" required="">
 							</div>
 							<div class="clear"></div>
 							<div class="date">
 								<div class="depart">
 									<h3>Depart</h3>
-									<input id="datepicker" name="Text" type="text" value="mm/dd/yyyy"
+									<input id="datepicker" name="departDate" type="text" value="mm/dd/yyyy"
 										onfocus="this.value = '';"
 										onblur="if (this.value == '') {this.value = 'mm/dd/yyyy';}" required="">
 									<span class="checkbox1">
@@ -67,7 +77,7 @@
 								</div>
 								<div class="return">
 									<h3>Return</h3>
-									<input id="datepicker1" name="Text" type="text" value="mm/dd/yyyy"
+									<input id="datepicker1" name="returnDate" type="text" value="mm/dd/yyyy"
 										onfocus="this.value = '';"
 										onblur="if (this.value == '') {this.value = 'mm/dd/yyyy';}" required="">
 									<span class="checkbox1">
@@ -80,40 +90,41 @@
 							<div class="class">
 								<h3>Class</h3>
 								<select id="w3_country1" onchange="change_country(this.value)"
-									class="frm-field required">
-									<option value="null">Economy</option>
-									<option value="null">Premium Economy</option>
-									<option value="null">Business</option>
-									<option value="null">First class</option>
+									class="frm-field required" name="travelClass">
+									<option value="Economy">Economy</option>
+									<option value="Premium Economy">Premium Economy</option>
+									<option value="Business">Business</option>
+									<option value="First class">First class</option>
 								</select>
 
 							</div>
 							<div class="clear"></div>
 							<div class="numofppl">
 								<div class="adults">
-									<h3>Adult:(12+ yrs)</h3>
+									<h3>Adults (12+ yrs)</h3>
 									<div class="quantity">
-										<div class="quantity-select">
-											<div class="entry value-minus">&nbsp;</div>
-											<div class="entry value"><span>1</span></div>
-											<div class="entry value-plus active">&nbsp;</div>
-										</div>
+										<div class="entry value-minus" onclick="decrement('adults')">-</div>
+										<div class="entry value"><span id="adultCount">1</span></div>
+										<div class="entry value-plus active" onclick="increment('adults')">+</div>
 									</div>
 								</div>
 								<div class="child">
-									<h3>Child:(2-11 yrs)</h3>
+									<h3>Children (2-11 yrs)</h3>
 									<div class="quantity">
-										<div class="quantity-select">
-											<div class="entry value-minus">&nbsp;</div>
-											<div class="entry value"><span>1</span></div>
-											<div class="entry value-plus active">&nbsp;</div>
+										<div class="entry value-minus" onclick="decrement('children')">-</div>
+										<div class="entry value"><span id="childCount">1</span></div>
+										<div class="entry value-plus active" onclick="increment('children')">+
 										</div>
 									</div>
 								</div>
 								<div class="clear"></div>
 							</div>
+
 							<div class="clear"></div>
-							<input type="submit" value="Search Flights">
+							<button onclick="sendemail()" type="button">BOOK TICKET</button>
+							<div id="ticket-link">
+								<h6><a href="#" id="ticket" onclick="downloadticket()"> Clike Here And Download Your E-Ticket </a></h6>
+							</div>
 						</form>
 					</div>
 					<div class="tab-1 resp-tab-content oneway">
@@ -121,19 +132,23 @@
 							<!-- ... (rest of the form remains unchanged) ... -->
 							<div class="from">
 								<h3>From</h3>
-								<input type="text" name="city" class="city1" placeholder="Type Departure City"
-									required="">
+								<input type="text" name="city" id="from1" class="city1"
+									placeholder="Type Departure City" required="">
 							</div>
 							<div class="to">
 								<h3>To</h3>
-								<input type="text" name="city" class="city2" placeholder="Type Destination City"
-									required="">
+								<input type="text" name="city" id="to1" class="city2"
+									placeholder="Type Destination City" required="">
 							</div>
 							<div class="clear"></div>
+							<div class="email">
+								<h3>E-Mail</h3>
+								<input type="email" name="email" id="emailoneway" placeholder="E-mail" required="">
+							</div>
 							<div class="date">
 								<div class="depart">
 									<h3>Depart</h3>
-									<input class="date" id="datepicker2" name="Text" type="text" value="mm/dd/yyyy"
+									<input class="date" id="datepickerone" name="Text" type="text" value="mm/dd/yyyy"
 										onfocus="this.value = '';"
 										onblur="if (this.value == '') {this.value = 'mm/dd/yyyy';}" required="">
 									<span class="checkbox1">
@@ -146,10 +161,10 @@
 								<h3>Class</h3>
 								<select id="w3_country1" onchange="change_country(this.value)"
 									class="frm-field required">
-									<option value="null">Economy</option>
-									<option value="null">Premium Economy</option>
-									<option value="null">Business</option>
-									<option value="null">First class</option>
+									<option value="Economy">Economy</option>
+									<option value="Premium Economy">Premium Economy</option>
+									<option value="Business">Business</option>
+									<option value="First class">First class</option>
 								</select>
 
 							</div>
@@ -178,7 +193,10 @@
 								<div class="clear"></div>
 							</div>
 							<div class="clear"></div>
-							<input type="submit" value="Search Flights">
+							<button onclick="sendemail()" type="button">BOOK TICKET</button>
+							<div id="ticket-link">
+								<h6><a href="#" id="ticket" onclick="downloadticket()"> Clike Here And Download Your E-Ticket </a></h6>
+							</div>
 						</form>
 
 					</div>
@@ -187,19 +205,23 @@
 						<form action="#" method="post">
 							<div class="from">
 								<h3>From</h3>
-								<input type="text" name="city" class="city1" placeholder="Type Departure City"
-									required="">
+								<input type="text" name="city" id="from2" class="city1"
+									placeholder="Type Departure City" required="">
 							</div>
 							<div class="to">
 								<h3>To</h3>
-								<input type="text" name="city" class="city2" placeholder="Type Destination City"
-									required="">
+								<input type="text" name="city" id="to2" class="city2"
+									placeholder="Type Destination City" required="">
 							</div>
 							<div class="clear"></div>
+							<div class="email">
+								<h3>E-Mail</h3>
+								<input type="email" name="email" id="emailmulticity" placeholder="E-mail" required="">
+							</div>
 							<div class="date">
 								<div class="depart">
 									<h3>Depart</h3>
-									<input class="date" id="datepicker3" name="Text" type="text" value="mm/dd/yyyy"
+									<input class="date" id="datepickertwo" name="Text" type="text" value="mm/dd/yyyy"
 										onfocus="this.value = '';"
 										onblur="if (this.value == '') {this.value = 'mm/dd/yyyy';}" required="">
 									<span class="checkbox1">
@@ -212,48 +234,48 @@
 								<h3>Class</h3>
 								<select id="w3_country1" onchange="change_country(this.value)"
 									class="frm-field required">
-									<option value="null">Economy</option>
-									<option value="null">Premium Economy</option>
-									<option value="null">Business</option>
-									<option value="null">First class</option>
+									<option value="Economy">Economy</option>
+									<option value="Premium Economy">Premium Economy</option>
+									<option value="Business">Business</option>
+									<option value="First class">First class</option>
 								</select>
 							</div>
 							<div class="clear"></div>
 							<div id="addcity">Add City+</div>
 							<div id="removecity">Remove</div>
 						</form>
-						<div class="load_more"  id="load_more_btn">
+						<div class="load_more" id="load_more_btn">
 							<ul id="myList">
 								<li>
-								<div id="bg-color">
-									<div class="l_g spcl">
-										<form action="#" method="post" class="blackbg" id="bg-color">
-											<div class="from">
-												<h3>From</h3>
-												<input type="text" name="city" class="city1"
-													placeholder="Type Departure City" required="">
-											</div>
-											<div class="to">
-												<h3>To</h3>
-												<input type="text" name="city" class="city2"
-													placeholder="Type Destination City" required="">
-											</div>
-											<div class="clear"></div>
-											<div class="date">
-												<div class="depart">
-													<h3>Depart</h3>
-													<input class="date" id="datepicker" name="Text" type="text"
-														value="mm/dd/yyyy" onfocus="this.value = '';"
-														onblur="if (this.value == '') {this.value = 'mm/dd/yyyy';}"
-														required="">
-													<span class="checkbox1">
-														<label class="checkbox"><input type="checkbox" name=""
-																checked=""><i> </i>Flexible with date</label>
-													</span>
+									<div id="bg-color">
+										<div class="l_g spcl">
+											<form action="#" method="post" class="blackbg" id="bg-color">
+												<div class="from">
+													<h3>From</h3>
+													<input type="text" name="city" id="from3" class="city1"
+														placeholder="Type Departure City" required="">
 												</div>
-											</div>
-											<div class="clear"></div>
-										</form>
+												<div class="to">
+													<h3>To</h3>
+													<input type="text" name="city" id="to3" class="city2"
+														placeholder="Type Destination City" required="">
+												</div>
+												<div class="clear"></div>
+												<div class="date">
+													<div class="depart">
+														<h3>Depart</h3>
+														<input class="date" id="datepickerthree" name="Text" type="text"
+															value="mm/dd/yyyy" onfocus="this.value = '';"
+															onblur="if (this.value == '') {this.value = 'mm/dd/yyyy';}"
+															required="">
+														<span class="checkbox1">
+															<label class="checkbox"><input type="checkbox" name=""
+																	checked=""><i> </i>Flexible with date</label>
+														</span>
+													</div>
+												</div>
+												<div class="clear"></div>
+											</form>
 										</div>
 
 									</div>
@@ -284,7 +306,10 @@
 										<div class="clear"></div>
 									</div>
 									<div class="clear"></div>
-									<input type="submit" value="BOOK TICKET">
+									<button onclick="sendemail()" type="button">BOOK TICKET</button>
+							<div id="ticket-link">
+								<h6><a href="#" id="ticket" onclick="downloadticket()"> Clike Here And Download Your E-Ticket </a></h6>
+							</div>
 								</form>
 							</ul>
 						</div>
@@ -302,6 +327,163 @@
 		<p class="agileinfo"> &copy; 2024 DECCAN AIRLINES. All
 			rights reserved.<a href="#"></a></p>
 	</div>
+
+	<script>
+		function sendemail() {
+			var from = document.getElementById("from").value;
+			var to = document.getElementById("to").value;
+			var email = document.getElementById("email").value;
+			var departDate = document.getElementById("datepicker").value;
+			var returnDate = document.getElementById("datepicker1").value;
+			var travelClass = document.getElementById("w3_country1").value;
+
+			var templateParams = {
+				email: email,
+				to_name: name,
+				fromCity: from,
+				toCity: to,
+				departDate: departDate,
+				returnDate: returnDate,
+				travelClass: travelClass
+			};
+
+			emailjs.send('service_256szwd', 'template_4r7358i', templateParams)
+				.then(function (response) {
+					console.log('SUCCESS!', response.status, response.text);
+					window.alert("Email Sent successfully!");
+
+				})
+				.catch(function (error) {
+					console.log('FAILED...', error);
+					window.alert("Failed to send email!");
+				});
+
+		}
+	</script>
+	<script>
+		function sendemail() {
+			var from = document.getElementById("from1").value;
+			var to = document.getElementById("to1").value;
+			var email = document.getElementById("emailoneway").value;
+			var departDate = document.getElementById("datepickerone").value;
+			var travelClass = document.getElementById("w3_country1").value;
+
+			var templateParams = {
+				email: email,
+				to_name: "Deccan Airlines", // Assuming 'name' is hardcoded or obtained from another source
+				fromCity: from,
+				toCity: to,
+				departDate: departDate,
+				travelClass: travelClass
+			};
+
+			emailjs.send('service_256szwd', 'template_ffgw31s', templateParams)
+				.then(function (response) {
+					console.log('SUCCESS!', response.status, response.text);
+					window.alert("Email Sent successfully!");
+
+				})
+				.catch(function (error) {
+					console.log('FAILED...', error);
+					window.alert("Failed to send email! Please check your email address and try again.");
+				});
+
+		}
+
+	</script>
+	<script>
+		function sendemail() {
+			var from = document.getElementById("from2").value;
+			var to = document.getElementById("to2").value;
+			var email = document.getElementById("emailmulticity").value;
+			var departDate = document.getElementById("datepickertwo").value;
+			var travelClass = document.getElementById("w3_country1").value;
+			var from = document.getElementById("from3").value;
+			var to = document.getElementById("to3").value;
+			var departDate = document.getElementById("datepickerthree").value;
+
+			var templateParams = {
+				email: email,
+				to_name: name, // Assuming 'name' is hardcoded or obtained from another source
+				fromCity: from,
+				toCity: to,
+				departDate: departDate,
+				travelClass: travelClass
+			};
+
+			emailjs.send('service_256szwd', 'template_ffgw31s', templateParams)
+				.then(function (response) {
+					console.log('SUCCESS!', response.status, response.text);
+					window.alert("Email Sent successfully!");
+
+				})
+				.catch(function (error) {
+					console.log('FAILED...', error);
+					window.alert("Failed to send email! Please check your email address and try again.");
+				});
+
+		}
+
+	</script>
+	<script>
+		function downloadticket() {
+			// Capture user inputs
+			var fromCity = document.getElementById("from").value;
+			var toCity = document.getElementById("to").value;
+			var email = document.getElementById("email").value;
+			var departDate = document.getElementById("datepicker").value;
+			var returnDate = document.getElementById("datepicker1").value;
+			var travelClass = document.getElementById("w3_country1").value;
+			var numAdults = document.querySelector(".adults .quantity .value span").textContent;
+			var numChildren = document.querySelector(".child .quantity .value span").textContent;
+
+			// Store user inputs in sessionStorage to access them on the next page
+			sessionStorage.setItem("userInputs", JSON.stringify({
+				fromCity: fromCity,
+				toCity: toCity,
+				email: email,
+				departDate: departDate,
+				returnDate: returnDate,
+				travelClass: travelClass,
+				numAdults: numAdults,
+				numChildren: numChildren
+			}));
+
+			// Redirect to the new page
+			window.location.href = "response.html";
+		}
+
+		function generateSeatNumbers(numAdults, numChildren) {
+            var seatNumbers = [];
+            for (var i = 1; i <= numAdults; i++) {
+                var seatNumber = Math.floor(Math.random() * 100) + 1; // Generate a random seat number between 1 and 100
+                seatNumbers.push(seatNumber);
+            }
+            for (var j = 1; j <= numChildren; j++) {
+                var seatNumber = Math.floor(Math.random() * 100) + 1; // Generate a random seat number between 1 and 100
+                seatNumbers.push(seatNumber);
+            }
+            return seatNumbers;
+        }
+
+        // Get the number of adults and children
+        var numAdults = userInputs.numAdults;
+        var numChildren = userInputs.numChildren;
+
+        // Generate seat numbers for each passenger
+        var seatNumbers = generateSeatNumbers(numAdults, numChildren);
+
+        // Display seat numbers on the page
+        var seatNumbersList = document.getElementById("seatNumbers");
+        seatNumbers.forEach(function(seatNumber) {
+            var listItem = document.createElement("li");
+            listItem.textContent = "Seat Number: " + seatNumber;
+            seatNumbersList.appendChild(listItem);
+        });
+
+
+	</script>
+
 	<!--script for portfolio-->
 	<script src="./jquery.min.js"> </script>
 	<script src="./easyResponsiveTabs.js" type="text/javascript"></script>
@@ -365,33 +547,31 @@
 	<!--//quantity-->
 	<!--load more-->
 	<script>
- $(document).ready(function () {
-    size_li = $("#myList li").size();
-    x = 1;
-    $('#myList li:lt(' + x + ')').show();
+		$(document).ready(function () {
+			size_li = $("#myList li").size();
+			x = 1;
+			$('#myList li:lt(' + x + ')').show();
 
-    $('#addcity').click(function () {
-        x = (x + 1 <= size_li) ? x + 1 : size_li;
-        $('#myList li:lt(' + x + ')').show();
-        $('#load_more_btn').show(); // Show the load_more div
-    });
+			$('#addcity').click(function () {
+				x = (x + 1 <= size_li) ? x + 1 : size_li;
+				$('#myList li:lt(' + x + ')').show();
+				$('#load_more_btn').show(); // Show the load_more div
+			});
 
-    $('#removecity').click(function () {
-        x = (x - 1 < 0) ? 1 : x - 1;
-        $('#myList li').not(':lt(' + x + ')').hide();
-        if (x == 1) {
-            $('#load_more_btn').hide(); // Hide the load_more div if only one city is shown
-        }
-    });
-});
+			$('#removecity').click(function () {
+				x = (x - 1 < 0) ? 1 : x - 1;
+				$('#myList li').not(':lt(' + x + ')').hide();
+				if (x == 1) {
+					$('#load_more_btn').hide(); // Hide the load_more div if only one city is shown
+				}
+			});
+		});
 
-</script>
+	</script>
 
 
 
-	<?php
-    include 'process_form.php';
-    ?>
+
 
 </body>
 

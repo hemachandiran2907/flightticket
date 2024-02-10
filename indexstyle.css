@@ -54,7 +54,11 @@ footer{
     row-gap: 30px;
 }
 .skills-padding{
-    padding: 76px ;
+    padding: 76px 0;
+}
+.row{
+    margin-right: calc(-.0 * var(--bs-gutter-x));
+    margin-left: calc(-.0 * var(--bs-gutter-x));
 }
 a{
     text-decoration: none;
